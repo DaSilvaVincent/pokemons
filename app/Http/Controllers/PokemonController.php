@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pokemon;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
@@ -99,7 +100,8 @@ class PokemonController extends Controller
     public function show(Request $request, $id) {
         $action = $request->query('action', 'show');
         $pokemons = Pokemon::findOrFail($id);
-        return view('pokemons.show', ['pokemon' => $pokemons, 'action' => $action]);
+        $users = User::findOrFail($id);
+        return view('pokemons.show', ['pokemon' => $pokemons, 'user' => $users, 'action' => $action]);
     }
 
     /**

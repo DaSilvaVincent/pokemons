@@ -30,8 +30,8 @@ Route::resource('pokemons', PokemonController::class);
 
 Route::post('/pokemons/{id}/upload', [PokemonController::class, 'upload'])->name('pokemons.upload');
 
-Route::get('/dashboard', function () {
+Route::middleware(['auth'])->get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->name('dashboard');
 
 require __DIR__.'/auth.php';

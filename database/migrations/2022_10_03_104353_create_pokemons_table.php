@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('faiblesse')->default('A Faire')->nullable(false);;
             $table->integer('degat')->default(0)->nullable(false);
             $table->string('url_media')->default('images/no_image.png')->nullable(false);
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -1,10 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
+.container {
     font-family: sans-serif;
     color: #343a40;
     height: 100vh;
@@ -14,7 +19,7 @@ body {
     grid-template-rows: 80px 1fr 80px;
 }
 
-menu {
+.container menu {
     background-color: #69db7c;
     grid-column: 1 / -1;
     display: flex;
@@ -23,7 +28,7 @@ menu {
     padding: 0 40px;
 }
 
-button {
+.container button {
     display: inline-block;
     font-size: 16px;
     font-weight: bold;
@@ -34,42 +39,46 @@ button {
     padding: 6px 10px;
 }
 
-menu button:last-child {
+
+.container menu div button {
     background-color: #d6336c;
+}
+
+.container menu div:last-child {
     margin-left: auto;
 }
 
-.entete {
+.container .entete {
     position: relative;
 }
 
-button.aDroite {
+.container button.aDroite {
     position: absolute;
     right: 240px;
     top: 5px;
 }
 
-main {
+.container main {
     grid-column: 1 / 3;
     overflow: scroll;
     margin-left: 20px;
 }
 
-aside {
+.container aside {
     grid-column: 3 / -1;
     background-color: #e9ecef;
     text-align: center;
 
 }
 
-footer {
+.container footer {
     grid-column: 1 / -1;
     display: flex;
     justify-content: center;
     margin-top: 24px;
 }
 
-.welcome {
+.container .welcome {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -77,44 +86,44 @@ footer {
     font-size: 100px;
 }
 
-menu a {
+.container menu a {
     color: white;
 }
 
-a:link {
-    /*color: #1098ad;*/
+.container a:link {
     color: white;
     text-decoration: none;
 }
 
-a:visited {
-    /* color: #777; */
-    /*color: #1098ad;*/
+.container a:visited {
+
 }
 
-a:hover {
+.container a:hover {
     color: orangered;
     font-weight: bold;
     text-decoration: underline orangered;
 }
 
-menu a:visited {
-    /*color: #1098ad;*/
+.container menu a:visited {
+
 }
 
-menu a:hover {
+.container menu a:hover {
     color: white;
     font-weight: bold;
     font-size: 1.2rem;
     text-decoration: none;
 }
 
-a:active {
+.container a:active {
     background-color: black;
     font-style: italic;
 }
 
-form, .errors {
+
+
+.container form, .errors {
     width: 600px;
     margin: 60px auto;
     border: #d6336c 1px solid;
@@ -123,30 +132,30 @@ form, .errors {
     max-width: 600px;
 }
 
-.form-create * {
+.container .form-create * {
     box-sizing: border-box;
 }
 
-.form-control {
+.container .form-control {
     margin-bottom: 20px;
 }
 
-.form-control, .form-buttons {
+.container .form-control, .form-buttons {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
 }
 
-.form-label {
+.container .form-label {
     flex: 1 0 120px;
     max-width: 220px;
 }
 
-.form-label {
+.container .form-label {
     font-weight: bold;
 }
 
-.form-input {
+.container .form-input {
     flex: 1 0 220px;
 }
 
@@ -154,46 +163,41 @@ form, .errors {
     justify-content: space-around;
 }
 
-button {
-    /*margin-left: auto;*/
+.container button {
     display: inline-block;
     padding: 8px 16px;
     border: none;
-    /*background: #333;*/
-    /*color: #f2f2f2;*/
     text-transform: uppercase;
     border-radius: 2px;
 }
 
-button[type="reset"] {
+.container button[type="reset"] {
     background: #d53838;
 }
 
 
-.errors li {
+.container .errors li {
     list-style: none;
     color: red;
     font-size: 1.2rem;
 }
 
-.titre-erreurs {
+.container .titre-erreurs {
     text-align: center;
     color: #d6336c;
     margin-bottom: 10px;
 }
 
-td {
-    padding-left: 20px;
-    padding-right: 20px;
+.container td {
     text-align: center;
 }
 
-.largeur {
+.container .largeur {
     width: 50%;
     text-align: justify;
 }
 
-.msg-info {
+.container .msg-info {
     width: 400px;
     display: flex;
     align-items: center;
@@ -201,37 +205,46 @@ td {
     justify-content: space-around;
 }
 
-.msg-info.primary {
+.container .msg-info.primary {
     background-color: #c0eb75;
     color: #66a80f;
 }
 
-.msg-info.warning {
+.container .msg-info.warning {
     background-color: #ffe066;
     color: #f08c00;
 }
 
-.msg-info.error {
+.container .msg-info.error {
     background-color: #ffa8a8;
     color: #e03131;
 }
 
-.msg-icon {
+.container .msg-icon {
     width: 24px;
     padding: 5px;
 }
 
-.msg {
+.container .msg {
     flex: 1 0 140px;
     max-width: 220px;
 }
 
-.image {
+.container .image {
     margin: 20px auto;
     width: 200px;
 }
 
 
-.image img {
+.container .image img {
     max-width: 200px;
+}
+
+.container table a {
+    color: black;
+}
+
+.container table a:link {
+    color: black;
+    text-decoration: none;
 }

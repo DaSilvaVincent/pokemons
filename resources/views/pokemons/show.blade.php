@@ -8,6 +8,7 @@
         <th>type</th>
         <th>faiblesse</th>
         <th>degat</th>
+        <th>Utilisateur créateur</th>
         </thead>
         <tbody>
             <tr>
@@ -18,6 +19,7 @@
                 <td>{{$pokemon->type}}</td>
                 <td>{{$pokemon->faiblesse}}</td>
                 <td>{{$pokemon->degat}}</td>
+                <td>{{$user->name}}</td>
             </tr>
         </tbody>
     </table>
