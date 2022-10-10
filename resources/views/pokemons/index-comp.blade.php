@@ -1,7 +1,16 @@
 <x-layout titre="Affichage des pokémons">
-@if(!empty($pokemons))
-    <table>
-        <thead>
+    @if(!empty($pokemons))
+        <form action="{{route('pokemons.index')}}" method="get">
+            <select name="cat">
+                <option value="All" @if($cat == 'All') selected @endif>-- Tous les types --</option>
+                @foreach($types as $type)
+                    <option value="{{$type}}" @if($cat == $type) selected @endif>{{$type}}</option>
+                @endforeach
+            </select>
+            <input type="submit" value="OK">
+        </form>
+        <table>
+            <thead>
             <th>#</th>
             <th>nom</th>
             <th>extension</th>
@@ -12,8 +21,8 @@
             <th>Modification</th>
             <th>visualisation</th>
             <th>supression</th>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             @foreach($pokemons as $pokemon)
                 <tr>
                     <td>{{$pokemon->id}}</td>
@@ -29,9 +38,9 @@
 
                 </tr>
             @endforeach
-        </tbody>
-    </table>
-@else
-    <h3>aucun pokemon</h3>
-@endif
+            </tbody>
+        </table>
+    @else
+        <h3>aucun pokemon</h3>
+    @endif
 </x-layout>

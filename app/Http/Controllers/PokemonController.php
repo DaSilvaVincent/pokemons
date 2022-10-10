@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Pokemon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PokemonController extends Controller
 {
@@ -11,11 +14,35 @@ class PokemonController extends Controller
      * Display a listing of the resource.
      *
      */
-    public function index()
+
+    public function index(Request $request)
     {
-        $pokemons = Pokemon::all();
-        return view('pokemons.index', ['pokemons' => $pokemons]);
+        $cat = $request->input('cat', null);
+        $value = $request->cookie('cat', null);
+        if (!isset($cat)) {
+            if (!isset($value)) {
+                $pokemons = Pokemon::all();
+                $cat = 'All';
+                Cookie::expire('cat');
+            } else {
+                $pokemons = Pokemon::where('type', $value)->get();
+                $cat = $value;
+                Cookie::queue('cat', $cat, 10);
+            }
+        } else {
+            if ($cat == 'All') {
+                $pokemons = Pokemon::all();
+                Cookie::expire('cat');
+            } else {
+                $pokemons = Pokemon::where('type', $cat)->get();
+                Cookie::queue('cat', $cat, 10);
+            }
+        }
+        $types = Pokemon::distinct('type')->pluck('type');
+        return view('pokemons.index-comp', ['titre' => "Liste des pokemons", 'pokemons' => $pokemons, 'cat' => $cat, 'types' => $types]);
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -70,8 +97,9 @@ class PokemonController extends Controller
      * @param  int  $id
      */
     public function show(Request $request, $id) {
+        $action = $request->query('action', 'show');
         $pokemons = Pokemon::findOrFail($id);
-        return view('pokemons.show', ['pokemon' => $pokemons]);
+        return view('pokemons.show', ['pokemon' => $pokemons, 'action' => $action]);
     }
 
     /**
@@ -118,6 +146,37 @@ class PokemonController extends Controller
         return redirect()->route('pokemons.index');
     }
 
+    public function upload(Request $request, $id) {
+        $pokemon = Pokemon::findOrFail($id);
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $file = $request->file('image');
+        } else {
+            if (!$request->hasFile('image'))
+                $msg = "Aucun fichier téléchargé";
+            else
+                $msg = "fichier mal téléchargé";
+            return redirect()->route('pokemons.show', [$pokemon->id])
+                ->with('type', 'error')
+                ->with('msg', 'Pokemon non modifiée (' . $msg . ')');
+        }
+        $base = 'image';
+        $now = time();
+        $nom = sprintf("%s_%d.%s", $base, $now, $file->extension());
+
+        $file->storeAs('images', $nom);
+        if (isset($tache->url_media) && $tache->url_media != "images/no_image.png") {
+            Log::info("Image supprimée : " . $tache->url_media);
+            Storage::delete($tache->url_media);
+        }
+        $pokemon->url_media = 'images/' . $nom;
+        $pokemon->save();
+        //$file->store('images');
+        return redirect()->route('pokemons.show', [$pokemon->id])
+            ->with('type', 'primary')
+            ->with('msg', 'Pokemon modifiée avec succès');
+    }
+
+
     /**
      * Remove the specified resource from storage.
      *
@@ -130,12 +189,12 @@ class PokemonController extends Controller
             $pokemon->delete();
             return redirect()->route('pokemons.index')
                 ->with('type', 'primary')
-                ->with('msg', 'Pokemon ajoutée avec succès');
+                ->with('msg', 'Suppression du pokemon réalisé');
 
         } else {
             return redirect()->route('pokemons.index')
                 ->with('type', 'error')
-                ->with('msg', 'Suppression pokemon annulée');
+                ->with('msg', 'Suppression du pokemon annulée');
         }
     }
 }

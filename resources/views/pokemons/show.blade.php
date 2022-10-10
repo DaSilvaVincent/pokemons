@@ -1,11 +1,4 @@
-<html>
-<head>
-    <title>Affichage d'un pokemon</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <h3>Affichage d'un pokemon</h3>
+<x-layout titre="Affiche ou supprime un pokémon ">
     <table>
         <thead>
         <th>#</th>
@@ -28,13 +21,24 @@
             </tr>
         </tbody>
     </table>
-        <form action="{{route('pokemons.destroy',$pokemon->id)}}" method="POST">
-            @csrf
-            @method('DELETE')
-            <div class="text-center">
-                <button type="submit" name="delete" value="valide">supprimer</button>
-                <button type="submit" name="delete" value="annule">Retour a la liste</button>
-            </div>
-        </form>
-</body>
-</html>
+    <div clas="image">
+        <img src="{{url('storage/'.$pokemon->url_media)}}" alt="le logo">
+    </div>
+        @if($action == 'delete')
+            <form action="{{route('pokemons.destroy',$pokemon->id)}}" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="text-center">
+                    <button type="submit" name="delete" value="valide">Valider la suppression</button>
+                    <button type="submit" name="delete" value="annule">Annuler la suppression</button>
+                </div>
+            </form>
+        @else
+            <form action="{{route('pokemons.index')}}" method="GET">
+                @csrf
+                <div class="text-center">
+                    <button type="submit" name="delete" value="annule">Retour à la liste</button>
+                </div>
+            </form>
+        @endif
+</x-layout>

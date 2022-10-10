@@ -17,6 +17,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
+
+Route::get('/apropos', function () {
+    return view('apropos');
+})->name('apropos');
+
+Route::get('/contacts', function () {
+    return view('contacts');
+})->name('contacts');
 
 Route::resource('pokemons', PokemonController::class);
+
+Route::post('/pokemons/{id}/upload', [PokemonController::class, 'upload'])->name('pokemons.upload');

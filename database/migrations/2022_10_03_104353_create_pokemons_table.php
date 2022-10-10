@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('type')->default('A Faire')->nullable(false);;
             $table->string('faiblesse')->default('A Faire')->nullable(false);;
             $table->integer('degat')->default(0)->nullable(false);
+            $table->string('url_media')->default('images/no_image.png')->nullable(false);
             $table->timestamps();
         });
     }
