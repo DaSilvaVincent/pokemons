@@ -26,12 +26,15 @@ Route::get('/contacts', function () {
     return view('contacts');
 })->name('contacts');
 
-Route::resource('pokemons', PokemonController::class);
+Route::get('/dashboard', function () {
+    return view('dashboard', ['titre'=>'Admin']);
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::post('/pokemons/{id}/upload', [PokemonController::class, 'upload'])->name('pokemons.upload');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('/pokemons', PokemonController::class)->except('index');
+    Route::get('/pokemons', [PokemonController::class, 'index'])->name('pokemons.index');
+    Route::post('/pokemons/{id}/upload', [PokemonController::class, 'upload'])->name('pokemons.upload');
+});
 
-Route::middleware(['auth'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
 
 require __DIR__.'/auth.php';

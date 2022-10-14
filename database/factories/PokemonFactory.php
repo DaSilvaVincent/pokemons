@@ -20,8 +20,6 @@ class PokemonFactory extends Factory
 
     protected $model = Pokemon::class;
 
-    private static $i = 1;
-
     public function definition() {
         $createAt = $this->faker->dateTimeInInterval(
             $startDate = '-6 months',
@@ -29,7 +27,6 @@ class PokemonFactory extends Factory
         );
         $users_id = User::all()->pluck('id');
         return [
-            'id' => self::$i++,
             'user_id' => $this->faker->randomElement($users_id),
             'nom' => $this->faker->randomElement($array = array('coucou', 'ronron', 'pika')),
             'extension' => $this->faker->randomElement($array = array('Urgent', 'A Faire', 'Optionnel')),

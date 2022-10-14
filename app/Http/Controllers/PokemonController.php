@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Pokemon;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
@@ -51,7 +54,15 @@ class PokemonController extends Controller
      */
     public function create()
     {
-        return view ('pokemons.create');
+        try {
+            $this->authorize('create', Pokemon::class);
+        } catch (AuthorizationException $e) {
+            return redirect()->route('pokemons.index')
+                ->with('type', 'error')
+                ->with('msg', 'Vous n\'avez pas les droits de création d\'un pokemon.');
+        }
+
+        return view('pokemons.create');
     }
 
     /**
@@ -60,36 +71,39 @@ class PokemonController extends Controller
      */
     public function store(Request $request) {
         // validation des données de la requête
-        $this->validate(
-            $request,
-            [
-                'nom' => 'required',
-                'extension' => 'required',
-                'vie' => 'required',
-                'type' => 'required',
-                'faiblesse' => 'required',
-                'degat' => 'required',
-            ]
-        );
+        if (Auth::check()) {
+            $this->validate(
+                $request,
+                [
+                    'nom' => 'required',
+                    'extension' => 'required',
+                    'vie' => 'required',
+                    'type' => 'required',
+                    'faiblesse' => 'required',
+                    'degat' => 'required',
+                ]
+            );
 
-        // code exécuté uniquement si les données sont validaées
-        // sinon un message d'erreur est renvoyé vers l'utilisateur
+            // code exécuté uniquement si les données sont validaées
+            // sinon un message d'erreur est renvoyé vers l'utilisateur
 
-        // préparation de l'enregistrement à stocker dans la base de données
-        $pokemon = new Pokemon;
+            // préparation de l'enregistrement à stocker dans la base de données
+            $pokemon = new Pokemon;
 
-        $pokemon->nom = $request->nom;
-        $pokemon->extension = $request->extension;
-        $pokemon->vie = $request->vie;
-        $pokemon->type = $request->type;
-        $pokemon->faiblesse = $request->faiblesse;
-        $pokemon->degat = $request->degat;
+            $pokemon->nom = $request->nom;
+            $pokemon->extension = $request->extension;
+            $pokemon->vie = $request->vie;
+            $pokemon->type = $request->type;
+            $pokemon->faiblesse = $request->faiblesse;
+            $pokemon->degat = $request->degat;
+            $pokemon->user_id = Auth::id();
 
-        // insertion de l'enregistrement dans la base de données
-        $pokemon->save();
+            // insertion de l'enregistrement dans la base de données
+            $pokemon->save();
 
-        // redirection vers la page qui affiche la liste des tâches
-        return redirect()->route('pokemons.index');
+            // redirection vers la page qui affiche la liste des tâches
+            return redirect()->route('pokemons.index');
+        }
     }
 
     /**
@@ -100,8 +114,7 @@ class PokemonController extends Controller
     public function show(Request $request, $id) {
         $action = $request->query('action', 'show');
         $pokemons = Pokemon::findOrFail($id);
-        $users = User::findOrFail($id);
-        return view('pokemons.show', ['pokemon' => $pokemons, 'user' => $users, 'action' => $action]);
+        return view('pokemons.show', ['pokemon' => $pokemons, 'action' => $action]);
     }
 
     /**
@@ -112,6 +125,12 @@ class PokemonController extends Controller
     public function edit($id)
     {
         $pokemon = Pokemon::find($id);
+        try {
+            $this->authorize('update', $pokemon);
+        } catch (AuthorizationException $e) {
+            return view('error', ['titre' => "Accès non autorisé"]);
+        }
+
         return view('pokemons.edit', ['pokemon' => $pokemon]);
     }
 
@@ -184,9 +203,14 @@ class PokemonController extends Controller
      *
      * @param  int  $id
      */
-    public function destroy(Request $request, $id)
-    {
-        if ($request->delete == 'valide') {
+    public function destroy(Request $request, int $id) {
+        $pokemon = Pokemon::find($id);
+        if (Gate::denies('delete-pokemon', $pokemon)) {
+            return redirect()->route('pokemons.show',['titre' => 'Affichage d\'un pokemon', 'pokemon' => $pokemon->id, 'action' => 'show'])
+                ->with('type', 'error')
+                ->with('msg', 'Impossible de supprimer le pokemon');
+        }
+        else if ($request->delete == 'valide') {
             $pokemon = Pokemon::find($id);
             $pokemon->delete();
             return redirect()->route('pokemons.index')

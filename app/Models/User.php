@@ -38,8 +38,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $admin
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAdmin($value)
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     protected $table = 'users';
     use HasApiTokens, HasFactory, Notifiable;
@@ -78,4 +80,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Pokemon::class);
     }
+
+    public function isAdmin() {
+        return $this->admin;
+    }
+
 }

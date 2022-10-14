@@ -19,7 +19,7 @@
                 <td>{{$pokemon->type}}</td>
                 <td>{{$pokemon->faiblesse}}</td>
                 <td>{{$pokemon->degat}}</td>
-                <td>{{$user->name}}</td>
+                <td>{{$pokemon->user->name}}</td>
             </tr>
         </tbody>
     </table>
