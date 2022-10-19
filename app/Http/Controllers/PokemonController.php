@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jeu;
 use App\Models\Pokemon;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -114,7 +115,8 @@ class PokemonController extends Controller
     public function show(Request $request, $id) {
         $action = $request->query('action', 'show');
         $pokemons = Pokemon::findOrFail($id);
-        return view('pokemons.show', ['pokemon' => $pokemons, 'action' => $action]);
+        $jeux = $pokemons->jeu()->get();
+        return view('pokemons.show', ['pokemon' => $pokemons, 'jeux' => $jeux, 'action' => $action]);
     }
 
     /**

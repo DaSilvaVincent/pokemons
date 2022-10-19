@@ -10,6 +10,7 @@
 @auth
     <button><a href="{{route('pokemons.create')}}">📋 Créer votre pokémon</a></button>
     <button><a href="{{route('pokemons.index')}}">📜 Pokemon</a></button>
+    <button><a href="{{route('jeux.index')}}">💾 Jeux</a></button>
     <div>
         {{Auth::user()->name}}
         <button><a href="{{ route('logout') }}"

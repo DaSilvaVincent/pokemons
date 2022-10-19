@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\JeuController;
 use App\Http\Controllers\PokemonController;
+use App\Http\Controllers\VersionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +36,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/pokemons', PokemonController::class)->except('index');
     Route::get('/pokemons', [PokemonController::class, 'index'])->name('pokemons.index');
     Route::post('/pokemons/{id}/upload', [PokemonController::class, 'upload'])->name('pokemons.upload');
+    Route::get('/jeux', [JeuController::class, 'index'])->name('jeux.index');
+    Route::get('/jeux/{id}', [JeuController::class, 'show'])->name('jeux.show');
+    Route::get('/version/{id}', [VersionController::class, 'show'])->name('version.show');
+    Route::post('/version/{id}', [VersionController::class, 'showDate'])->name('version.showDate');
+
+
 });
 
 

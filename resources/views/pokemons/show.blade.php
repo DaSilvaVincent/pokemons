@@ -1,4 +1,6 @@
 <x-layout titre="Affiche ou supprime un pokémon ">
+
+    <div>Affichage du pokémon</div>
     <table>
         <thead>
         <th>#</th>
@@ -23,6 +25,31 @@
             </tr>
         </tbody>
     </table>
+    <br>
+    <div>Affichage des jeux du pokémon</div>
+        <table>
+            <thead>
+                <th>#</th>
+                <th>nom</th>
+                <th>editeur</th>
+                <th>genre</th>
+                <th>numero</th>
+                <th>date_sortie</th>
+            </thead>
+            <tbody>
+            @foreach($jeux as $jeu)
+                <tr>
+                    <td>{{$jeu->id}}</td>
+                    <td>{{$jeu->nom}}</td>
+                    <td>{{$jeu->editeur}}</td>
+                    <td>{{$jeu->genre}}</td>
+                    <td>{{$jeu['information']->numero}}</td>
+                    <td>{{$jeu['information']->date_sortie}}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    <br>
     <div clas="image">
         <img src="{{url('storage/'.$pokemon->url_media)}}" alt="le logo">
     </div>

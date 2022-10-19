@@ -60,4 +60,10 @@ class Pokemon extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    function jeu() {
+        return $this->belongsToMany(Jeu::class, 'version')
+            ->as('information')
+            ->withPivot('numero', 'date_sortie');
+    }
 }

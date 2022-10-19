@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             'admin' => true,
             'email' => "vin--cent@hotmail.fr",
             'email_verified_at' => now(),
-            'password' => Hash::make('Peper123'),
+            'password' => Hash::make('UnSecret'),
             'remember_token' => Str::random(10),
         ])->create();
 
@@ -31,10 +31,10 @@ class UserSeeder extends Seeder
             'admin' => false,
             'email' => "thimothee@gmail.com",
             'email_verified_at' => now(),
-            'password' => Hash::make('Thimo123'),
+            'password' => Hash::make('UnFauxSecret'),
             'remember_token' => Str::random(10),
         ])->create();
 
-        User::factory(10)->create();
+        User::factory(5)->create();
     }
 }

@@ -2,25 +2,21 @@
 
 namespace Database\Factories;
 
-use App\Models\Pokemon;
-use App\Models\User;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Jeu>
  */
-class PokemonFactory extends Factory
+class JeuFactory extends Factory
 {
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-
-    protected $model = Pokemon::class;
-
-    public function definition() {
+    public function definition()
+    {
         $createAt = $this->faker->dateTimeInInterval(
             $startDate = '-6 months',
             $interval = '+ 180 days',
@@ -32,6 +28,5 @@ class PokemonFactory extends Factory
                 $interval = $createAt->diff(new DateTime('now'))->format("%R%a days"),
             ),
         ];
-
     }
 }
